@@ -1,0 +1,188 @@
+﻿@model PlanCRUD.Models.Plan
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container">
+    <div class="edit">
+        <div style="display: flex; align-items: center;">
+            <!-- Back Button -->
+            <a asp-action="Index" class="btn btn-link">
+                <i class="bi bi-arrow-left bi-xxl text-dark"></i>
+            </a>
+
+            <!-- Heading -->
+            <h1 style="margin-left: 10px;">Edit</h1>
+        </div>
+
+        <hr />
+        <div class="row">
+            <div class="col-md-5">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <!-- Activity -->
+                    <div class="form-group mb-2">
+                        <h5 class="control-label">@Html.DisplayNameFor(model => model.Activity)</h5>
+                        <input asp-for="Activity" class="form-control" />
+                        <span asp-validation-for="Activity" class="text-danger"></span>
+                    </div>
+
+                    <!-- Days of the Week Checkboxes -->
+                    <div class="form-group mb-3">
+                        <h5 class="control-label">@Html.DisplayNameFor(model => model.Days)</h5>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex">
+                                    <div class="form-check form-check-inline me-3">
+                                        <input class="form-check-input" type="checkbox" name="Days" id="allDaysCheckbox" value="AllDays"
+                                               @(Model.Days.Contains("AllDays") ? "checked" : "") />
+                                        <label class="form-check-label" for="allDaysCheckbox">All</label>
+                                    </div>
+                                    <div class="form-check form-check-inline me-3">
+                                        <input class="form-check-input" type="checkbox" name="Days" value="Mon" id="monday"
+                                               @(Model.Days.Contains("Mon") ? "checked" : "") />
+                                        <label class="form-check-label" for="monday">Mon</label>
+                                    </div>
+                                    <div class="form-check form-check-inline me-3">
+                                        <input class="form-check-input" type="checkbox" name="Days" value="Tue" id="tuesday"
+                                               @(Model.Days.Contains("Tue") ? "checked" : "") />
+                                        <label class="form-check-label" for="tuesday">Tue</label>
+                                    </div>
+                                    <div class="form-check form-check-inline me-3">
+                                        <input class="form-check-input" type="checkbox" name="Days" value="Wed" id="wednesday"
+                                               @(Model.Days.Contains("Wed") ? "checked" : "") />
+                                        <label class="form-check-label" for="wednesday">Wed</label>
+                                    </div>
+                                    <div class="form-check form-check-inline me-3">
+                                        <input class="form-check-input" type="checkbox" name="Days" value="Thu" id="thursday"
+                                               @(Model.Days.Contains("Thu") ? "checked" : "") />
+                                        <label class="form-check-label" for="thursday">Thu</label>
+                                    </div>
+                                    <div class="form-check form-check-inline me-3">
+                                        <input class="form-check-input" type="checkbox" name="Days" value="Fri" id="friday"
+                                               @(Model.Days.Contains("Fri") ? "checked" : "") />
+                                        <label class="form-check-label" for="friday">Fri</label>
+                                    </div>
+                                    <div class="form-check form-check-inline me-3">
+                                        <input class="form-check-input" type="checkbox" name="Days" value="Sat" id="saturday"
+                                               @(Model.Days.Contains("Sat") ? "checked" : "") />
+                                        <label class="form-check-label" for="saturday">Sat</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="Days" value="Sun" id="sunday"
+                                               @(Model.Days.Contains("Sun") ? "checked" : "") />
+                                        <label class="form-check-label" for="sunday">Sun</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- StartTime and EndTime on the same row -->
+                    <div class="form-group mb-2">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="control-label">Start Time</h5>
+                                <input asp-for="StartTime" class="form-control" />
+                                <span asp-validation-for="StartTime" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <h5 class="control-label">End Time</h5>
+                                <input asp-for="EndTime" class="form-control" />
+                                <span asp-validation-for="EndTime" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Duration with dropdowns for Hours and Minutes -->
+                    <div class="form-group mb-2">
+                        <h5 class="control-label">@Html.DisplayNameFor(model => model.Duration)</h5>
+                        <div class="row">
+                            <div class="col">
+                                @Html.DropDownList("DurationHours",
+                                new SelectList(Enumerable.Range(0, 24).Select(i => new { Value = i, Text = $"{i} h" }), "Value", "Text", Model.Duration.Hours),
+                                new { @class = "form-control" })
+                            </div>
+                            <div class="col">
+                                @Html.DropDownList("DurationMinutes",
+                                new SelectList(new[] { 0, 15, 30, 45 }.Select(m => new { Value = m, Text = $"{m} m" }), "Value", "Text", Model.Duration.Minutes),
+                                new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <span asp-validation-for="Duration" class="text-danger"></span>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="form-group mb-2">
+                        <h5 class="control-label">@Html.DisplayNameFor(model => model.Price)</h5>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <select asp-for="Currency" class="form-select" id="currencySelect">
+                                    <option value="GBP" selected>£</option>
+                                    <option value="EUR">€</option>
+                                    <option value="USD">$</option>
+                                    <option value="JPY">¥</option>
+                                </select>
+                            </div>
+                            <input asp-for="Price" class="form-control" />
+                        </div>
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+
+                    <!-- Details -->
+                    <div class="form-group mb-3">
+                        <h5 class="control-label">@Html.DisplayNameFor(model => model.Details)</h5>
+                        <textarea asp-for="Details" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Details" class="text-danger"></span>
+                    </div>
+
+                    <!-- Submit button -->
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial");
+
+    <script>
+        // Handle the "All" checkbox
+        document.getElementById('allDaysCheckbox').addEventListener('change', function () {
+            var isChecked = this.checked;
+            var dayCheckboxes = document.querySelectorAll('input[name="Days"]');
+
+            dayCheckboxes.forEach(function (checkbox) {
+                checkbox.checked = isChecked;
+                if (checkbox.id != "allDaysCheckbox") {
+                    checkbox.disabled = isChecked;
+                }
+            });
+        });
+    </script>
+}
+
+<style>
+    .container {
+        display: flex;
+        justify-content: center;
+        padding-top: 20px;
+    }
+
+    .edit {
+        background-color: #f5f5f5;
+        border-radius: 8px;
+        padding: 20px;
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .col-md-5 {
+        width: 100%;
+    }
+</style>

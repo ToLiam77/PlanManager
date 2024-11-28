@@ -1,0 +1,125 @@
+﻿@model PlanCRUD.Models.Plan
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="details">
+    <div style="display: flex; align-items: center;">
+        <!-- Back Button -->
+        <a asp-action="Index" class="btn btn-link">
+            <i class="bi bi-arrow-left bi-xxl text-dark"></i>
+        </a>
+
+        <!-- Heading -->
+        <h1 style="margin-left: 10px;">Details</h1>
+    </div>
+
+    <div>
+        <hr />
+        <dl class="row">
+            <!-- Activity -->
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Activity)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Activity)
+            </dd>
+
+            <!-- Days -->
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Days)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Days)
+            </dd>
+
+            <!-- Combined StartTime and EndTime as Time -->
+            <dt class="col-sm-2">
+                Time
+            </dt>
+            <dd class="col-sm-10">
+                @{
+                    // Format StartTime and EndTime as hh:mm-hh:mm
+                    string formattedTime = $"{Model.StartTime:hh\\:mm}-{Model.EndTime:hh\\:mm}";
+                }
+                @formattedTime
+            </dd>
+
+            <!-- Duration -->
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Duration)
+            </dt>
+            <dd class="col-sm-10">
+                @{
+                    // Custom duration formatting
+                    string formattedDuration = string.Empty;
+                    if (Model.Duration.Hours > 0)
+                    {
+                        formattedDuration += $"{Model.Duration.Hours}h";
+                    }
+                    if (Model.Duration.Minutes > 0)
+                    {
+                        formattedDuration += $" {Model.Duration.Minutes}m";
+                    }
+                    else if (Model.Duration.Hours > 0)
+                    {
+                        formattedDuration = $"{Model.Duration.Hours}h"; // No minutes, just hours
+                    }
+
+                    if (string.IsNullOrWhiteSpace(formattedDuration))
+                    {
+                        formattedDuration = "0m"; // Fallback if duration is zero
+                    }
+                }
+                @formattedDuration
+            </dd>
+
+            <!-- Price -->
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Price)
+            </dt>
+            <dd class="col-sm-10">
+                @if (Model.Price == 0)
+                {
+                    <span>FREE</span>
+                }
+                else
+                {
+                    @Model.Price.ToString("C") <!-- Formats the price as currency -->
+                }
+            </dd>
+
+            <!-- Details -->
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Details)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Details)
+            </dd>
+        </dl>
+    </div>
+
+
+    <!-- Navigation links -->
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Edit</a>
+    </div>
+</div>
+
+
+<style>
+    .details {
+        background-color: #f5f5f5;
+        border-radius: 8px;
+        padding: 20px;
+        padding-right: 35px;
+        margin: 0 auto; 
+        max-width: 800px;
+        margin-top: 4vh;
+    }
+
+    .details dd {
+        text-align: justify; 
+    }
+</style>
